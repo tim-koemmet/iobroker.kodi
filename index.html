@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Iobroker.kodi by instalator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Iobroker.kodi</h1>
+      <h2 class="project-tagline">Kodi&#39;s JSON-RPC API for IoBroker</h2>
+      <a href="https://github.com/instalator/iobroker.kodi" class="btn">View on GitHub</a>
+      <a href="https://github.com/instalator/iobroker.kodi/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/instalator/iobroker.kodi/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p><img src="admin/kodi.png" alt="Logo"></p>
+
+<p><a href="https://www.npmjs.com/package/iobroker.kodi"><img src="https://img.shields.io/npm/v/iobroker.kodi.svg" alt="NPM version"></a>
+<a href="https://www.npmjs.com/package/iobroker.kodi"><img src="https://img.shields.io/npm/dm/iobroker.kodi.svg" alt="Downloads"></a></p>
+
+<p><a href="https://nodei.co/npm/iobroker.kodi/"><img src="https://nodei.co/npm/iobroker.kodi.png?downloads=true" alt="NPM"></a></p>
+
+<h1>
+<a id="kodis-json-rpc-api-for-iobroker" class="anchor" href="#kodis-json-rpc-api-for-iobroker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Kodi's JSON-RPC API for IoBroker</h1>
+
+<p>You can find kodi's official documentation of the JSON-RCP API <a href="http://kodi.wiki/view/JSON-RPC_API">here</a> and the full list of available commands (for protocol version 6) <a href="http://kodi.wiki/view/JSON-RPC_API/v6">here</a>.</p>
+
+<h2>
+<a id="Конфигурация-kodi" class="anchor" href="#%D0%9A%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D1%8F-kodi" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Конфигурация KODI</h2>
+
+<p>Remote control enable.
+<img src="admin/remote.jpg" alt="Remote control enable.">
+JSON-RPC API использует <strong>по умолчанию порт 9090</strong>, для того чтобы его изменить необходимо внести изменения в файл <a href="http://kodi.wiki/view/AdvancedSettings.xml">advancedsettings.xml</a></p>
+
+<p><em>Note: The advancedsettings.xml file does not exist by default. You have to create it first!</em></p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">jsonrpc</span>&gt;
+    &lt;<span class="pl-ent">compactoutput</span>&gt;true&lt;/<span class="pl-ent">compactoutput</span>&gt;
+    &lt;<span class="pl-ent">tcpport</span>&gt;9999&lt;/<span class="pl-ent">tcpport</span>&gt;
+&lt;/<span class="pl-ent">jsonrpc</span>&gt;</pre></div>
+
+<p><img src="admin/web.jpg" alt="http enable."></p>
+
+<h2>
+<a id="Конфигурация-драйвера" class="anchor" href="#%D0%9A%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%B4%D1%80%D0%B0%D0%B9%D0%B2%D0%B5%D1%80%D0%B0" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Конфигурация драйвера</h2>
+
+<p>В найстройках драйвера указывается IP адрес KODI и порт для JSON-RPC API (по умолчанию 9090).</p>
+
+<h2>
+<a id="using" class="anchor" href="#using" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using</h2>
+
+<h3>
+<a id="shownotif" class="anchor" href="#shownotif" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ShowNotif:</h3>
+
+<p>Один важный момент, если используется заголовок сообщения, то он должен всегда находится перед самим текстом сообщения (Внимание;Протечка воды), расположение остальных параметров не критично.</p>
+
+<p><strong>Image:</strong>
+Уровень сообщения</p>
+
+<ul>
+<li>'info' - 0 (default),</li>
+<li>'warning' - 1,</li>
+<li>'error' - 2.</li>
+</ul>
+
+<p><strong>displaytime:</strong>
+Время отображения сообщения в милисекундах, минимум 1500 макс 30000 мс.</p>
+
+<p><strong>Пример:</strong></p>
+
+<ul>
+<li>1;Внимание;Протечка воды;15000</li>
+<li>Внимание;Протечка воды;2;10000</li>
+<li>Внимание;Протечка воды</li>
+<li>Протечка воды</li>
+</ul>
+
+<p>Так же сообщения можно отправлять из драйвера javascript:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-en">sendTo</span>(<span class="pl-s"><span class="pl-pds">"</span>kodi.0<span class="pl-pds">"</span></span>, {
+    message<span class="pl-k">:</span>  <span class="pl-s"><span class="pl-pds">'</span>Возможно протечка воды <span class="pl-pds">'</span></span>, <span class="pl-c">//Текст сообщения</span>
+    title<span class="pl-k">:</span>    <span class="pl-s"><span class="pl-pds">'</span>ВНИМАНИЕ!!!<span class="pl-pds">'</span></span>, <span class="pl-c">//Заголовок сообщения</span>
+    image<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>https://raw.githubusercontent.com/instalator/ioBroker.kodi/master/admin/kodi.png<span class="pl-pds">'</span></span>, <span class="pl-c">//Ссылка на иконку</span>
+    delay<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>7000<span class="pl-pds">'</span></span> <span class="pl-c">//Время отображения сообщения милисекундах (минимум 1500 макс 30000 мс)</span>
+});</pre></div>
+
+<h3>
+<a id="switchpvr" class="anchor" href="#switchpvr" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SwitchPVR:</h3>
+
+<p>Переключение PVR IPTV каналов по названию канала в плейлисте.
+<strong>Пример:</strong>
+  ТВ канал - Discovery Science найдет как по полному наименованию так и по discover,</p>
+
+<h3>
+<a id="youtube" class="anchor" href="#youtube" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Youtube:</h3>
+
+<p>Для открытия видео с сайта youtube достаточно записать код видео в данный статус.
+Например: Для открытия этого <a href="https://www.youtube.com/watch?v=Bvmxr24D4TA">видео</a>, необходимо установить в статус - Bvmxr24D4TA</p>
+
+<h3>
+<a id="open" class="anchor" href="#open" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Open:</h3>
+
+<p>Сюда записывается ссылка на медиконтент в сети интернет либо путь до локального медиа файла.
+После записи значения начнется воспроизведение на проигрователе KODI.</p>
+
+<h3>
+<a id="position" class="anchor" href="#position" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Position:</h3>
+
+<p>Текущая позиция в плейлисте, так же в этот статус можно записать необходимую позицую и KODI тут же перейдет к воспроизведению этой позиции.</p>
+
+<h3>
+<a id="seek" class="anchor" href="#seek" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Seek:</h3>
+
+<p>Текущее значение позиции воспроизведения в процентах от 0 до 100.</p>
+
+<h3>
+<a id="repeat" class="anchor" href="#repeat" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Repeat:</h3>
+
+<p>Повтор воспроизведения, принимает следующие значения:</p>
+
+<ul>
+<li>off - повтор воспроизведения отключен</li>
+<li>on - повтор воспроизведения текущего трека</li>
+<li>all - повтор всего плейлиста</li>
+</ul>
+
+<h3>
+<a id="shuffle" class="anchor" href="#shuffle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Shuffle:</h3>
+
+<p>Перемешивание списка треков в плейлисте для случайного воспроизведения.
+Принимает значения true и false</p>
+
+<h3>
+<a id="play" class="anchor" href="#play" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Play:</h3>
+
+<p>Старт воспроизведения (true, false)</p>
+
+<h3>
+<a id="speed" class="anchor" href="#speed" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Speed:</h3>
+
+<p>Скорость воспроизведения. Фиксированные значения -32, -16, -8, -4, -2, -1, 0, 1, 2, 4, 8, 16, 32, а также increment и decrement</p>
+
+<h3>
+<a id="directory" class="anchor" href="#directory" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Directory:</h3>
+
+<p>Сюда записывается путь до папки или диска, в ответ в этот статус записывается список каталогов указанной папки или диска.</p>
+
+<h3>
+<a id="activatewindow" class="anchor" href="#activatewindow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ActivateWindow:</h3>
+
+<p>Активизирует в проигрывателе окно. Поддерживает следующий список:</p>
+
+<pre><code>"home", "programs", "pictures", "filemanager", "files", "settings", "music", "video", "videos", "tv", "pvr", "pvrguideinfo", "pvrrecordinginfo", "pvrtimersetting", "pvrgroupmanager", "pvrchannelmanager", "pvrchannelmanager", "pvrguidesearch", "pvrchannelscan", "pvrupdateprogress", "pvrosdchannels", "pvrosdguide", "pvrosddirector", "pvrosdcutter", "pvrosdteletext", "systeminfo", "testpattern", "screencalibration", "guicalibration", "picturessettings", "programssettings", "weathersettings", "musicsettings", "systemsettings", "videossettings", "networksettings", "servicesettings", "appearancesettings", "pvrsettings", "tvsettings", "scripts", "videofiles", "videolibrary", "videoplaylist", "loginscreen", "profiles", "skinsettings", "addonbrowser", "yesnodialog", "progressdialog", "virtualkeyboard", "volumebar", "submenu", "favourites", "contextmenu", "infodialog", "numericinput", "gamepadinput", "shutdownmenu", "mutebug", "playercontrols", "seekbar", "musicosd", "addonsettings", "visualisationsettings", "visualisationpresetlist", "osdvideosettings", "osdaudiosettings", "videobookmarks", "filebrowser", "networksetup", "mediasource", "profilesettings", "locksettings", "contentsettings", "songinformation", "smartplaylisteditor", "smartplaylistrule", "busydialog", "pictureinfo", "accesspoints", "fullscreeninfo", "karaokeselector", "karaokelargeselector", "sliderdialog", "addoninformation", "musicplaylist", "musicfiles", "musiclibrary", "musicplaylisteditor", "teletext", "selectdialog", "musicinformation", "okdialog", "movieinformation", "textviewer", "fullscreenvideo", "fullscreenlivetv", "visualisation", "slideshow", "filestackingdialog", "karaoke", "weather", "screensaver", "videoosd", "videomenu", "videotimeseek", "musicoverlay", "videooverlay", "startwindow", "startup", "peripherals", "peripheralsettings", "extendedprogressdialog", "mediafilter".
+</code></pre>
+
+<h3>
+<a id="executeaction" class="anchor" href="#executeaction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ExecuteAction:</h3>
+
+<p>Можно выполнить одно из следующих действий:</p>
+
+<pre><code>"left", "right", "up", "down", "pageup", "pagedown", "select", "highlight", "parentdir", "parentfolder", "back", "previousmenu", "info", "pause", "stop", "skipnext", "skipprevious", "fullscreen", "aspectratio", "stepforward", "stepback", "bigstepforward", "bigstepback", "osd", "showsubtitles", "nextsubtitle", "codecinfo", "nextpicture", "previouspicture", "zoomout", "zoomin", "playlist", "queue", "zoomnormal", "zoomlevel1", "zoomlevel2", "zoomlevel3", "zoomlevel4", "zoomlevel5", "zoomlevel6", "zoomlevel7", "zoomlevel8", "zoomlevel9", "nextcalibration", "resetcalibration", "analogmove", "rotate", "rotateccw", "close", "subtitledelayminus", "subtitledelay", "subtitledelayplus", "audiodelayminus", "audiodelay", "audiodelayplus", "subtitleshiftup", "subtitleshiftdown", "subtitlealign", "audionextlanguage", "verticalshiftup", "verticalshiftdown", "nextresolution", "audiotoggledigital", "number0", "number1", "number2", "number3", "number4", "number5", "number6", "number7", "number8", "number9", "osdleft", "osdright", "osdup", "osddown", "osdselect", "osdvalueplus", "osdvalueminus", "smallstepback", "fastforward", "rewind", "play", "playpause", "delete", "copy", "move", "mplayerosd", "hidesubmenu", "screenshot", "rename", "togglewatched", "scanitem", "reloadkeymaps", "volumeup", "volumedown", "mute", "backspace", "scrollup", "scrolldown", "analogfastforward", "analogrewind", "moveitemup", "moveitemdown", "contextmenu", "shift", "symbols", "cursorleft", "cursorright", "showtime", "analogseekforward", "analogseekback", "showpreset", "presetlist", "nextpreset", "previouspreset", "lockpreset", "randompreset", "increasevisrating", "decreasevisrating", "showvideomenu", "enter", "increaserating", "decreaserating", "togglefullscreen", "nextscene", "previousscene", "nextletter", "prevletter", "jumpsms2", "jumpsms3", "jumpsms4", "jumpsms5", "jumpsms6", "jumpsms7", "jumpsms8", "jumpsms9", "filter", "filterclear", "filtersms2", "filtersms3", "filtersms4", "filtersms5", "filtersms6", "filtersms7", "filtersms8", "filtersms9", "firstpage", "lastpage", "guiprofile", "red", "green", "yellow", "blue", "increasepar", "decreasepar", "volampup", "volampdown", "channelup", "channeldown", "previouschannelgroup", "nextchannelgroup", "leftclick", "rightclick", "middleclick", "doubleclick", "wheelup", "wheeldown", "mousedrag", "mousemove", "noop".
+
+</code></pre>
+
+<h2>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Changelog</h2>
+
+<h4>
+<a id="012-2016-07-05" class="anchor" href="#012-2016-07-05" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.1.2 (2016-07-05)</h4>
+
+<ul>
+<li>(instalator) change pvr switch - add stop</li>
+<li>(instalator) change dependencies</li>
+<li>(instalator) fix change play/stop state</li>
+</ul>
+
+<h4>
+<a id="011-2016-05-30" class="anchor" href="#011-2016-05-30" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.1.1 (2016-05-30)</h4>
+
+<ul>
+<li>(instalator) change admin setting</li>
+<li>(instalator) Fix error 'playerid' of undefined</li>
+</ul>
+
+<h4>
+<a id="010-2016-05-22" class="anchor" href="#010-2016-05-22" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.1.0 (2016-05-22)</h4>
+
+<ul>
+<li>(instalator) beta</li>
+</ul>
+
+<h4>
+<a id="006-2016-05-08" class="anchor" href="#006-2016-05-08" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.0.6 (2016-05-08)</h4>
+
+<ul>
+<li>(bluefox) fixed crash when the driver turned on the KODI</li>
+<li>(bluefox) make adapter disabled by default, because no IP set</li>
+<li>(instalator) Thumbnail widget</li>
+<li>(instalator) added GetDirectory, GetVideoLibrary</li>
+<li>(instalator) added Scan &amp; Clean Library</li>
+</ul>
+
+<h4>
+<a id="005-2016-05-04" class="anchor" href="#005-2016-05-04" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.0.5 (2016-05-04)</h4>
+
+<ul>
+<li>(instalator) change creating object</li>
+<li>(instalator) added info.connection state</li>
+</ul>
+
+<h4>
+<a id="004-2016-05-03" class="anchor" href="#004-2016-05-03" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.0.4 (2016-05-03)</h4>
+
+<ul>
+<li>(instalator) fix error</li>
+<li>(instalator) added VIS widgets</li>
+</ul>
+
+<h4>
+<a id="003-2016-05-01" class="anchor" href="#003-2016-05-01" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.0.3 (2016-05-01)</h4>
+
+<ul>
+<li>(instalator) fix error</li>
+<li>(instalator) added send message from JS</li>
+</ul>
+
+<h4>
+<a id="002-2016-04-24" class="anchor" href="#002-2016-04-24" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.0.2 (2016-04-24)</h4>
+
+<ul>
+<li>(instalator) remote player</li>
+<li>(instalator) ShowNotification</li>
+<li>(instalator) info playing</li>
+<li>(instalator) GetPVRChannel</li>
+</ul>
+
+<h4>
+<a id="001" class="anchor" href="#001" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.0.1</h4>
+
+<ul>
+<li>(instalator) initial (17.04.2016)</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/instalator/iobroker.kodi">Iobroker.kodi</a> is maintained by <a href="https://github.com/instalator">instalator</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
